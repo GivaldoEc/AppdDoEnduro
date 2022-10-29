@@ -1,6 +1,12 @@
-import 'package:appdowill/bloc/cubit/contador_cubit.dart';
+import 'dart:convert';
+
+import 'package:appdowill/config/preferences_keys.dart';
+import 'package:appdowill/repo/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../bloc/ContadorCubit/contador_cubit.dart';
 
 class CarAdder extends StatelessWidget {
   TextEditingController _numberController = TextEditingController();
@@ -48,11 +54,12 @@ class CarAdder extends StatelessWidget {
                 padding: const EdgeInsets.all(18.0),
                 child: ElevatedButton(
                   onPressed: () {
+                    _doConfirm();
                     if (_nameController.toString().isNotEmpty &&
                         _numberController.toString().isNotEmpty) {
                       BlocProvider.of<ContadorCubit>(context).createCar(
-                        int.parse(_numberController.toString()),
-                        _nameController.toString(),
+                        int.parse(_numberController.text),
+                        _nameController.text,
                       );
                       Navigator.pop(context);
                     }
@@ -65,5 +72,17 @@ class CarAdder extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _doConfirm() {
+    User newUser =
+        User(nome: _nameController.text, numero: _numberController.text);
+    print(newUser);
+    _saveUser(newUser);
+  }
+
+  void _saveUser(User user) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(PreferenceKeys.chave, json.encode(user.toJson()));
   }
 }

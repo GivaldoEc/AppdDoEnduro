@@ -1,8 +1,7 @@
-import 'dart:developer';
-
-import 'package:appdowill/bloc/cubit/contador_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../bloc/ContadorCubit/contador_cubit.dart';
 
 class MainList extends StatelessWidget {
   @override
@@ -16,13 +15,39 @@ class MainList extends StatelessWidget {
           child: ListView.separated(
             itemBuilder: (BuildContext context, int index) {
               return Container(
+                alignment: Alignment.center,
                 height: 100,
-                child: Row(
-                  children: [
-                    Text(cubit.getCars()[index].nomeDaEquipe),
-                    Text(cubit.getCars()[index].numeroDoCarro.toString()),
-                    Text(cubit.getCars()[index].getVoltas().toString()),
-                  ],
+                child: Dismissible(
+                  background: Container(
+                    color: Colors.red,
+                  ),
+                  key: ValueKey<dynamic>(cubit.getCars()[index]),
+                  onDismissed: (DismissDirection direction) {
+                    cubit.getCars().removeAt(index);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(cubit.getCars()[index].numeroDoCarro.toString()),
+                      Text(cubit.getCars()[index].nomeDaEquipe),
+                      Text(cubit.getCars()[index].getVoltas().toString()),
+                      GestureDetector(
+                        child: const Icon(Icons.arrow_upward),
+                        onTap: () {
+                          cubit.getCars()[index].increment();
+                          cubit.rebuild();
+                        },
+                      ),
+                      GestureDetector(
+                        child: const Icon(Icons.arrow_downward),
+                        onTap: () {
+                          Icon(Icons.arrow_downward);
+                          cubit.getCars()[index].decrement();
+                          cubit.rebuild();
+                        },
+                      )
+                    ],
+                  ),
                 ),
               );
             },

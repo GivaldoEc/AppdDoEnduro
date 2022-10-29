@@ -1,9 +1,9 @@
-import 'package:appdowill/bloc/cubit/contador_cubit.dart';
+import 'package:appdowill/bloc/Connectivity/connectivity_cubit.dart';
 import 'package:appdowill/config/navigator/routes.dart';
-import 'package:appdowill/presentation/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'bloc/ContadorCubit/contador_cubit.dart';
 import 'config/navigator/navigator.dart';
 
 void main() {
@@ -15,8 +15,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ContadorCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ContadorCubit(),
+        ),
+        BlocProvider(
+          create: (context) => ConnectivityCubit(),
+        ),
+      ],
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(

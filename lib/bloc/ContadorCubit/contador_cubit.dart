@@ -25,6 +25,9 @@ class ContadorCubit extends Cubit<ContadorState> {
     emit(ContadorIdle());
   }
 
+  void rebuild() {
+    emit(ContadorIdle());
+  }
   // void cleanList(){
   //   _carList = [];
   // }
